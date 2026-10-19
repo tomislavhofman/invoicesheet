@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Peppol UBL-factuur naar Excel: e-facturen in bulk omzetten | InvoiceSheet</title>
+<meta name="description" content="Sleep honderden Peppol/UBL e-facturen (of een zip) in je browser en krijg één Excel-bestand met facturen, factuurregels en btw. Niets wordt geüpload.">
+<link rel="canonical" href="https://hofman.tech/invoicesheet/nl/">
+<link rel="alternate" hreflang="en" href="https://hofman.tech/invoicesheet/">
+<link rel="alternate" hreflang="de" href="https://hofman.tech/invoicesheet/de/">
+<link rel="alternate" hreflang="fr" href="https://hofman.tech/invoicesheet/fr/">
+<link rel="alternate" hreflang="nl" href="https://hofman.tech/invoicesheet/nl/">
+<link rel="alternate" hreflang="pl" href="https://hofman.tech/invoicesheet/pl/">
+<link rel="alternate" hreflang="hr" href="https://hofman.tech/invoicesheet/hr/">
+<link rel="alternate" hreflang="x-default" href="https://hofman.tech/invoicesheet/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Peppol UBL-factuur naar Excel: e-facturen in bulk omzetten | InvoiceSheet">
+<meta property="og:description" content="Sleep honderden Peppol/UBL e-facturen (of een zip) in je browser en krijg één Excel-bestand met facturen, factuurregels en btw. Niets wordt geüpload.">
+<meta property="og:url" content="https://hofman.tech/invoicesheet/nl/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%230f6b5c%22%2F%3E%3Cpath%20d%3D%22M9%208h14M9%2013h14M9%2018h9M9%2023h6%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="/invoicesheet/assets/style.css?v=54aa6836">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"InvoiceSheet","applicationCategory":"BusinessApplication","operatingSystem":"Web browser","url":"https://hofman.tech/invoicesheet/nl/","description":"Sleep honderden Peppol/UBL e-facturen (of een zip) in je browser en krijg één Excel-bestand met facturen, factuurregels en btw. Niets wordt geüpload.","inLanguage":"nl","offers":[{"@type":"Offer","price":"0","priceCurrency":"EUR"}],"author":{"@type":"Person","name":"Tomislav Hofman","url":"https://hofman.tech/"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Worden mijn facturen ergens geüpload?","acceptedAnswer":{"@type":"Answer","text":"Nee. De bestanden worden met JavaScript in je browser gelezen en verlaten je apparaat niet. Alleen de pagina zelf en, indien nodig, open-sourcebibliotheken (pdf/zip/Excel) van cdnjs worden geladen."}},{"@type":"Question","name":"Wat staat er in het Excel-bestand?","acceptedAnswer":{"@type":"Answer","text":"Drie tabbladen. \"Facturen\": één rij per factuur met nummer, data, leverancier en klant met btw-nummer, excl., btw, incl., te betalen, IBAN en betalingskenmerk. \"Factuurregels\": elke regel. \"Btw-overzicht\": één rij per tarief per factuur."}},{"@type":"Question","name":"Valideert het mijn Peppol-facturen?","acceptedAnswer":{"@type":"Answer","text":"Het rekent na (excl. + btw = incl., regeltotaal, te betalen) en markeert afwijkingen. Het is geen volledige EN 16931-validatie."}},{"@type":"Question","name":"Hoe open ik één UBL-factuur?","acceptedAnswer":{"@type":"Answer","text":"Sleep het bestand erin en klik op het factuurnummer: je ziet een leesbare factuur die je kunt afdrukken of als pdf bewaren. Gratis en onbeperkt."}},{"@type":"Question","name":"Wie zit erachter?","acceptedAnswer":{"@type":"Answer","text":"Tomislav Hofman, software-engineer in Osijek, Kroatië. Betalingen lopen via Polar als merchant of record, dat ook je factuur met btw uitreikt."}},{"@type":"Question","name":"Kan ik mijn geld terugkrijgen?","acceptedAnswer":{"@type":"Answer","text":"Ja, stuur binnen 14 dagen een e-mail voor volledige terugbetaling."}}]}</script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="dec793c0-5ade-448a-acfb-2c015b441f1d" data-domains="hofman.tech"></script>
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="brand" href="/invoicesheet/nl/">Invoice<span>Sheet</span></a>
+  <nav class="langs" aria-label="Language"><a href="/invoicesheet/" hreflang="en">English</a><a href="/invoicesheet/de/" hreflang="de">Deutsch</a><a href="/invoicesheet/fr/" hreflang="fr">Français</a><a href="/invoicesheet/nl/" hreflang="nl" aria-current="true">Nederlands</a><a href="/invoicesheet/pl/" hreflang="pl">Polski</a><a href="/invoicesheet/hr/" hreflang="hr">Hrvatski</a></nav>
+</div></header>
+<main>
+<div class="wrap">
+  <section class="hero">
+    <h1>Peppol- en UBL-facturen omzetten naar Excel, in bulk</h1>
+    <p>Sleep UBL/Peppol-XML, Factur-X/ZUGFeRD-pdf’s of een zip naar het vak. Alle facturen verschijnen leesbaar in een tabel, elke factuur opent als printbare weergave, en je exporteert facturen, regels en btw naar Excel of CSV.</p>
+    <div class="badges"><span class="badge">Niets wordt geüpload: draait in je browser</span><span class="badge">Honderden bestanden tegelijk</span><span class="badge">XML, pdf en zip</span></div>
+  </section>
+
+  <div id="is-drop" class="drop" role="button" tabindex="0" aria-describedby="is-drop-hint">
+    <strong>Sleep e-facturen hierheen</strong>
+    <span id="is-drop-hint" class="muted">of klik om te kiezen: .xml, .pdf (Factur-X/ZUGFeRD), .zip</span>
+    <input id="is-file" type="file" multiple accept=".xml,.pdf,.zip,application/xml,text/xml,application/pdf,application/zip">
+  </div>
+  <p id="is-drop-status" class="muted small" aria-live="polite"></p>
+  <p id="is-gate-note" class="muted small"></p>
+
+  <section id="is-results" class="results" hidden>
+    <div class="toolbar">
+      <strong id="is-count"></strong>
+      <span class="spacer"></span>
+      <button id="is-xlsx" class="btn primary" type="button">Excel downloaden</button>
+      <button id="is-csv" class="btn" type="button">CSV: facturen</button>
+      <button id="is-csv-lines" class="btn" type="button">CSV: regels</button>
+      <button id="is-clear" class="btn" type="button">Wissen</button>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Factuurnr.</th><th>Datum</th><th>Leverancier</th><th>Klant</th><th class="num">Excl.</th><th class="num">Btw</th><th class="num">Incl.</th><th>Val.</th><th>Formaat</th></tr></thead>
+        <tbody id="is-tbody"></tbody>
+        <tfoot id="is-tfoot"></tfoot>
+      </table>
+    </div>
+    <ul id="is-errors" hidden></ul>
+  </section>
+</div>
+
+<section class="block"><div class="wrap">
+  <h2>Zo werkt het</h2>
+  <div class="grid"><div class="card"><h3>1. Sleep je bestanden</h3><p>Peppol/UBL-XML uit je boekhoudpakket of Peppol-inbox, pdf’s met ingesloten XML, of een zip.</p></div><div class="card"><h3>2. Controleer de tabel</h3><p>Elke factuur met leverancier, klant, excl., btw en incl. Totalen worden nagerekend en afwijkingen gemarkeerd.</p></div><div class="card"><h3>3. Exporteer</h3><p>Eén Excel-bestand met drie tabbladen (facturen, regels, btw-overzicht), klaar voor je boekhouding of draaitabel.</p></div></div>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2>Ondersteunde formaten</h2>
+  <div class="grid"><div class="card"><h3>UBL 2.1</h3><p>Facturen en creditnota’s: Peppol BIS Billing 3.0, NLCIUS / SI-UBL, EHF, XRechnung (UBL).</p></div><div class="card"><h3>UN/CEFACT CII</h3><p>Factur-X, ZUGFeRD 2.x en XRechnung (CII).</p></div><div class="card"><h3>Hybride pdf’s</h3><p>Factur-X en ZUGFeRD: de ingesloten XML wordt automatisch uitgelezen.</p></div><div class="card"><h3>KSeF FA(3)</h3><p>Poolse gestructureerde facturen uit KSeF (FA(3), ook FA(2) en FA(1)), inclusief correctiefacturen.</p></div><div class="card"><h3>Zip-archieven</h3><p>Sleep een volledige export; XML- en pdf-bestanden erin worden gelezen.</p></div></div>
+</div></section>
+
+<section class="block" id="pricing"><div class="wrap">
+  <h2>Prijzen</h2>
+  <div class="grid">
+    <div class="card"><h3>Gratis</h3><div class="price">€ 0</div><ul><li>Onbeperkt bekijken en afdrukken</li><li>Excel/CSV-export van 3 facturen tegelijk</li><li>Alle formaten, pdf en zip</li></ul></div>
+    <div class="card"><h3>Pro</h3><div class="price">€ 29 <span class="muted small">eenmalig</span></div><ul><li>Onbeperkte bulkexport naar Excel en CSV</li><li>Tabbladen voor regels en btw</li><li>Alle toekomstige updates</li><li>14 dagen geld terug, zonder vragen</li></ul>
+      <span class="btn" aria-disabled="true">Binnenkort</span> <p class="small muted" style="margin-top:8px">Lanceringsperiode: bulkexport is gratis voor iedereen.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2>Vragen</h2>
+  <details><summary>Worden mijn facturen ergens geüpload?</summary><p>Nee. De bestanden worden met JavaScript in je browser gelezen en verlaten je apparaat niet. Alleen de pagina zelf en, indien nodig, open-sourcebibliotheken (pdf/zip/Excel) van cdnjs worden geladen.</p></details>
+  <details><summary>Wat staat er in het Excel-bestand?</summary><p>Drie tabbladen. &quot;Facturen&quot;: één rij per factuur met nummer, data, leverancier en klant met btw-nummer, excl., btw, incl., te betalen, IBAN en betalingskenmerk. &quot;Factuurregels&quot;: elke regel. &quot;Btw-overzicht&quot;: één rij per tarief per factuur.</p></details>
+  <details><summary>Valideert het mijn Peppol-facturen?</summary><p>Het rekent na (excl. + btw = incl., regeltotaal, te betalen) en markeert afwijkingen. Het is geen volledige EN 16931-validatie.</p></details>
+  <details><summary>Hoe open ik één UBL-factuur?</summary><p>Sleep het bestand erin en klik op het factuurnummer: je ziet een leesbare factuur die je kunt afdrukken of als pdf bewaren. Gratis en onbeperkt.</p></details>
+  <details><summary>Wie zit erachter?</summary><p>Tomislav Hofman, software-engineer in Osijek, Kroatië. Betalingen lopen via Polar als merchant of record, dat ook je factuur met btw uitreikt.</p></details>
+  <details><summary>Kan ik mijn geld terugkrijgen?</summary><p>Ja, stuur binnen 14 dagen een e-mail voor volledige terugbetaling.</p></details>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2>Handleidingen</h2>
+  <ul class="guides"><li><a href="/invoicesheet/nl/peppol-factuur-openen/" hreflang="nl">Peppol-factuur openen en lezen</a></li><li><a href="/invoicesheet/de/xrechnung-oeffnen/" hreflang="de">XRechnung öffnen und lesen</a> <span class="muted small">(Deutsch)</span></li><li><a href="/invoicesheet/de/e-rechnung-oeffnen/" hreflang="de">E-Rechnung öffnen</a> <span class="muted small">(Deutsch)</span></li><li><a href="/invoicesheet/de/zugferd-auslesen/" hreflang="de">ZUGFeRD-Rechnung auslesen</a> <span class="muted small">(Deutsch)</span></li><li><a href="/invoicesheet/fr/lire-facture-factur-x/" hreflang="fr">Lire une facture Factur-X ou XML</a> <span class="muted small">(Français)</span></li><li><a href="/invoicesheet/pl/ksef-do-excela/" hreflang="pl">Faktury z KSeF do Excela</a> <span class="muted small">(Polski)</span></li><li><a href="/invoicesheet/pl/jak-otworzyc-fakture-ksef-xml/" hreflang="pl">Jak otworzyć fakturę XML z KSeF</a> <span class="muted small">(Polski)</span></li><li><a href="/invoicesheet/hr/kako-otvoriti-e-racun/" hreflang="hr">Kako otvoriti e-račun (XML)</a> <span class="muted small">(Hrvatski)</span></li><li><a href="/invoicesheet/ubl-invoice-viewer/" hreflang="en">UBL / Peppol invoice viewer</a> <span class="muted small">(English)</span></li><li><a href="/invoicesheet/ubl-to-excel/" hreflang="en">UBL / Peppol XML to Excel</a> <span class="muted small">(English)</span></li><li><a href="/invoicesheet/en16931-fields/">EN 16931-veldenoverzicht (UBL- en CII-XPath, Engels)</a></li></ul>
+</div></section>
+</main>
+<footer class="site"><div class="wrap">
+  <span>Gemaakt in Kroatië door Tomislav Hofman · <a href="https://hofman.tech/">hofman.tech</a></span>
+  <span><a href="/invoicesheet/privacy.html">Privacy</a> · <a href="/invoicesheet/terms.html">Voorwaarden &amp; terugbetaling</a> · <a href="mailto:contact@hofman.tech">Contact</a></span>
+</div></footer>
+
+<dialog id="is-modal" aria-label="Invoice">
+  <div class="dialog-bar"><button id="is-print" class="btn" type="button">Afdrukken / pdf</button><button class="btn" type="button" data-close>Sluiten</button></div>
+  <div id="is-modal-body" class="dialog-body"></div>
+</dialog>
+
+<dialog id="is-paywall" aria-labelledby="is-pw-title">
+  <div class="dialog-body">
+    <h2 id="is-pw-title" style="margin-top:0"><span id="is-paywall-count"></span> facturen exporteren met Pro</h2>
+    <p>De gratis versie exporteert tot 3 facturen tegelijk. Pro heft de limiet op voor eenmalig € 29: geen abonnement, 14 dagen geld terug.</p>
+    <p><a id="is-buy" class="btn primary" href="#" target="_blank" rel="noopener">Pro kopen, € 29</a></p>
+    <p class="small">Al gekocht? Plak je licentiesleutel:</p>
+    <form id="is-key-form"><input id="is-key" autocomplete="off" spellcheck="false" placeholder="XXXX-XXXX-…" aria-label="Licence key"><button class="btn" type="submit">Activeren</button></form>
+    <p id="is-key-msg" class="small" aria-live="polite"></p>
+    <p style="text-align:right;margin-bottom:0"><button class="btn" type="button" data-close>Sluiten</button></p>
+  </div>
+</dialog>
+
+<script>window.IS_CONFIG={"polarOrgId":"","checkoutUrl":"","freeLimit":3};window.IS_I18N={"parsing":"Bestanden worden gelezen…","err_not_invoice":"geen e-factuur (UBL-, CII- of KSeF-XML verwacht)","err_pdf_no_xml":"deze pdf bevat geen ingesloten e-factuur-XML","err_read":"kon niet worden gelezen","kind_invoice":"Factuur","kind_credit":"Creditnota","kind_correction":"Correctiefactuur","n_invoices":"{n} facturen","totals_label":"Totaal (creditnota’s afgetrokken)","warn_netvat":"excl. + btw ≠ incl.","warn_lines":"regels tellen niet op tot het regeltotaal","warn_payable":"te betalen wijkt af van incl. − vooruitbetaald","launch_free":"Lanceringsperiode: bulkexport is gratis voor iedereen.","free_limit":"Gratis: export van maximaal {n} facturen tegelijk. Pro ontgrendelt onbeperkte bulkexport.","pro_active":"Pro is actief in deze browser. Bedankt!","key_ok":"Licentie geactiveerd.","key_bad":"Deze licentiesleutel is niet herkend.","key_offline":"Licentieserver niet bereikbaar. Probeer het zo opnieuw.","sheet_invoices":"Facturen","sheet_lines":"Factuurregels","sheet_vat":"Btw-overzicht","col_file":"Bestand","col_format":"Formaat","col_type":"Soort","col_number":"Factuurnr.","col_issue":"Factuurdatum","col_due":"Vervaldatum","col_currency":"Valuta","col_seller":"Leverancier","col_seller_vat":"Btw-nr. leverancier","col_seller_country":"Land leverancier","col_buyer":"Klant","col_buyer_vat":"Btw-nr. klant","col_buyer_ref":"Referentie klant","col_order_ref":"Bestelnr.","col_net":"Excl. btw","col_vat":"Btw","col_gross":"Incl. btw","col_prepaid":"Vooruitbetaald","col_payable":"Te betalen","col_pay_ref":"Betalingskenmerk","col_lines":"Regels","col_check":"Controle","col_line":"Regel","col_item":"Artikel","col_desc":"Omschrijving","col_item_id":"Artikelnr.","col_qty":"Aantal","col_unit":"Eenheid","col_unit_price":"Prijs per eenheid","col_line_net":"Excl.","col_vat_cat":"Btw-categorie","col_vat_rate":"Btw %","col_vat_base":"Maatstaf","col_vat_amount":"Btw-bedrag","v_issued":"Datum","v_due":"Vervalt","v_delivery":"Levering","v_seller":"Van","v_buyer":"Aan","v_vatid":"Btw-nr.","v_taxid":"Fiscaal nr.","v_payment":"Betaling","v_lines_total":"Totaal regels","v_allowances":"Kortingen","v_charges":"Toeslagen","v_prepaid":"Vooruitbetaald","v_generated":"Leesbare weergave gemaakt door InvoiceSheet uit de e-factuur-XML","u_pcs":"st.","u_day":"dag","u_month":"maand","u_year":"jaar","u_week":"week","u_lumpsum":"forfait","u_set":"set"};</script>
+<script src="/invoicesheet/assets/parser.js?v=40305118"></script>
+<script src="/invoicesheet/assets/app.js?v=a6372af0"></script>
+</body>
+</html>

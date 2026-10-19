@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>eRačun XML u Excel: pregled i pretvorba e-računa | InvoiceSheet</title>
+<meta name="description" content="Otvorite i pregledajte XML e-račune (UBL, eRačun, Peppol, ZUGFeRD) i pretvorite ih u Excel: računi, stavke i PDV. Radi u pregledniku, ništa se ne šalje na poslužitelj.">
+<link rel="canonical" href="https://hofman.tech/invoicesheet/hr/">
+<link rel="alternate" hreflang="en" href="https://hofman.tech/invoicesheet/">
+<link rel="alternate" hreflang="de" href="https://hofman.tech/invoicesheet/de/">
+<link rel="alternate" hreflang="fr" href="https://hofman.tech/invoicesheet/fr/">
+<link rel="alternate" hreflang="nl" href="https://hofman.tech/invoicesheet/nl/">
+<link rel="alternate" hreflang="pl" href="https://hofman.tech/invoicesheet/pl/">
+<link rel="alternate" hreflang="hr" href="https://hofman.tech/invoicesheet/hr/">
+<link rel="alternate" hreflang="x-default" href="https://hofman.tech/invoicesheet/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="eRačun XML u Excel: pregled i pretvorba e-računa | InvoiceSheet">
+<meta property="og:description" content="Otvorite i pregledajte XML e-račune (UBL, eRačun, Peppol, ZUGFeRD) i pretvorite ih u Excel: računi, stavke i PDV. Radi u pregledniku, ništa se ne šalje na poslužitelj.">
+<meta property="og:url" content="https://hofman.tech/invoicesheet/hr/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%230f6b5c%22%2F%3E%3Cpath%20d%3D%22M9%208h14M9%2013h14M9%2018h9M9%2023h6%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="/invoicesheet/assets/style.css?v=54aa6836">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"InvoiceSheet","applicationCategory":"BusinessApplication","operatingSystem":"Web browser","url":"https://hofman.tech/invoicesheet/hr/","description":"Otvorite i pregledajte XML e-račune (UBL, eRačun, Peppol, ZUGFeRD) i pretvorite ih u Excel: računi, stavke i PDV. Radi u pregledniku, ništa se ne šalje na poslužitelj.","inLanguage":"hr","offers":[{"@type":"Offer","price":"0","priceCurrency":"EUR"}],"author":{"@type":"Person","name":"Tomislav Hofman","url":"https://hofman.tech/"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Šalju li se moji računi negdje?","acceptedAnswer":{"@type":"Answer","text":"Ne. Datoteke čita JavaScript u vašem pregledniku i nikad ne napuštaju vaše računalo. Učitava se samo stranica i, po potrebi, open-source biblioteke (PDF/ZIP/Excel) s cdnjs-a."}},{"@type":"Question","name":"Što je u Excel datoteci?","acceptedAnswer":{"@type":"Answer","text":"Tri lista. „Računi”: jedan red po računu s brojem, datumima, izdavateljem i kupcem (PDV ID), osnovicom, PDV-om, ukupnim iznosom, IBAN-om i pozivom na broj. „Stavke”: sve stavke. „PDV rekapitulacija”: jedan red po stopi PDV-a i računu."}},{"@type":"Question","name":"Kako otvoriti jedan eRačun XML?","acceptedAnswer":{"@type":"Answer","text":"Povucite datoteku i kliknite broj računa: dobivate čitljiv račun koji možete ispisati ili spremiti kao PDF. Besplatno i bez ograničenja."}},{"@type":"Question","name":"Provjerava li alat ispravnost e-računa?","acceptedAnswer":{"@type":"Answer","text":"Provjerava izračune (osnovica + PDV = ukupno, zbroj stavki, iznos za plaćanje) i označava odstupanja. Nije potpuna EN 16931 validacija."}},{"@type":"Question","name":"Tko stoji iza InvoiceSheeta?","acceptedAnswer":{"@type":"Answer","text":"Tomislav Hofman, softverski inženjer iz Osijeka. Plaćanje obrađuje Polar kao prodavatelj (merchant of record), koji izdaje i račun s PDV-om."}},{"@type":"Question","name":"Mogu li dobiti povrat novca?","acceptedAnswer":{"@type":"Answer","text":"Da, pošaljite e-mail unutar 14 dana za puni povrat."}}]}</script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="dec793c0-5ade-448a-acfb-2c015b441f1d" data-domains="hofman.tech"></script>
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="brand" href="/invoicesheet/hr/">Invoice<span>Sheet</span></a>
+  <nav class="langs" aria-label="Language"><a href="/invoicesheet/" hreflang="en">English</a><a href="/invoicesheet/de/" hreflang="de">Deutsch</a><a href="/invoicesheet/fr/" hreflang="fr">Français</a><a href="/invoicesheet/nl/" hreflang="nl">Nederlands</a><a href="/invoicesheet/pl/" hreflang="pl">Polski</a><a href="/invoicesheet/hr/" hreflang="hr" aria-current="true">Hrvatski</a></nav>
+</div></header>
+<main>
+<div class="wrap">
+  <section class="hero">
+    <h1>Otvorite eRačun XML i pretvorite ga u Excel</h1>
+    <p>Povucite XML e-račune, PDF-ove s ugrađenim XML-om ili ZIP. Svi računi prikazuju se čitljivo u tablici, svaki možete otvoriti i ispisati, a račune, stavke i PDV izvozite u Excel ili CSV.</p>
+    <div class="badges"><span class="badge">Ništa se ne šalje: radi u pregledniku</span><span class="badge">Stotine datoteka odjednom</span><span class="badge">XML, PDF i ZIP</span></div>
+  </section>
+
+  <div id="is-drop" class="drop" role="button" tabindex="0" aria-describedby="is-drop-hint">
+    <strong>Povucite e-račune ovdje</strong>
+    <span id="is-drop-hint" class="muted">ili kliknite za odabir: .xml, .pdf, .zip</span>
+    <input id="is-file" type="file" multiple accept=".xml,.pdf,.zip,application/xml,text/xml,application/pdf,application/zip">
+  </div>
+  <p id="is-drop-status" class="muted small" aria-live="polite"></p>
+  <p id="is-gate-note" class="muted small"></p>
+
+  <section id="is-results" class="results" hidden>
+    <div class="toolbar">
+      <strong id="is-count"></strong>
+      <span class="spacer"></span>
+      <button id="is-xlsx" class="btn primary" type="button">Preuzmi Excel</button>
+      <button id="is-csv" class="btn" type="button">CSV: računi</button>
+      <button id="is-csv-lines" class="btn" type="button">CSV: stavke</button>
+      <button id="is-clear" class="btn" type="button">Očisti</button>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Broj</th><th>Datum</th><th>Izdavatelj</th><th>Kupac</th><th class="num">Osnovica</th><th class="num">PDV</th><th class="num">Ukupno</th><th>Val.</th><th>Format</th></tr></thead>
+        <tbody id="is-tbody"></tbody>
+        <tfoot id="is-tfoot"></tfoot>
+      </table>
+    </div>
+    <ul id="is-errors" hidden></ul>
+  </section>
+</div>
+
+<section class="block"><div class="wrap">
+  <h2>Kako radi</h2>
+  <div class="grid"><div class="card"><h3>1. Povucite datoteke</h3><p>XML e-računi (npr. preuzeti iz MIKROeRAČUN-a ili informacijskog posrednika), PDF-ovi s XML-om ili ZIP.</p></div><div class="card"><h3>2. Provjerite tablicu</h3><p>Svaki račun s izdavateljem, kupcem, osnovicom, PDV-om i ukupnim iznosom. Zbrojevi se provjeravaju, odstupanja označavaju.</p></div><div class="card"><h3>3. Izvezite</h3><p>Jedna Excel datoteka s tri lista (računi, stavke, PDV rekapitulacija), spremna za knjigovodstvo ili KPR.</p></div></div>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2>Podržani formati</h2>
+  <div class="grid"><div class="card"><h3>UBL 2.1</h3><p>Računi i odobrenja: hrvatski eRačun (HR CIUS), Peppol BIS Billing 3.0, XRechnung (UBL).</p></div><div class="card"><h3>UN/CEFACT CII</h3><p>ZUGFeRD 2.x, Factur-X i XRechnung (CII).</p></div><div class="card"><h3>Hibridni PDF</h3><p>ZUGFeRD i Factur-X: ugrađeni XML automatski se izvlači.</p></div><div class="card"><h3>KSeF FA(3)</h3><p>Poljski strukturirani računi iz sustava KSeF (FA(3), FA(2) i FA(1)), uključujući korektivne račune.</p></div><div class="card"><h3>ZIP arhive</h3><p>Povucite cijeli izvoz; XML i PDF datoteke unutra se čitaju.</p></div></div>
+</div></section>
+
+<section class="block" id="pricing"><div class="wrap">
+  <h2>Cijene</h2>
+  <div class="grid">
+    <div class="card"><h3>Besplatno</h3><div class="price">0 €</div><ul><li>Neograničen pregled i ispis</li><li>Izvoz u Excel/CSV do 3 računa odjednom</li><li>Svi formati, PDF i ZIP</li></ul></div>
+    <div class="card"><h3>Pro</h3><div class="price">29 € <span class="muted small">jednokratno</span></div><ul><li>Neograničeni skupni izvoz u Excel i CSV</li><li>Listovi sa stavkama i PDV-om</li><li>Sva buduća ažuriranja</li><li>Povrat novca u 14 dana bez pitanja</li></ul>
+      <span class="btn" aria-disabled="true">Uskoro</span> <p class="small muted" style="margin-top:8px">Razdoblje lansiranja: skupni izvoz besplatan je za sve.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2>Pitanja</h2>
+  <details><summary>Šalju li se moji računi negdje?</summary><p>Ne. Datoteke čita JavaScript u vašem pregledniku i nikad ne napuštaju vaše računalo. Učitava se samo stranica i, po potrebi, open-source biblioteke (PDF/ZIP/Excel) s cdnjs-a.</p></details>
+  <details><summary>Što je u Excel datoteci?</summary><p>Tri lista. „Računi”: jedan red po računu s brojem, datumima, izdavateljem i kupcem (PDV ID), osnovicom, PDV-om, ukupnim iznosom, IBAN-om i pozivom na broj. „Stavke”: sve stavke. „PDV rekapitulacija”: jedan red po stopi PDV-a i računu.</p></details>
+  <details><summary>Kako otvoriti jedan eRačun XML?</summary><p>Povucite datoteku i kliknite broj računa: dobivate čitljiv račun koji možete ispisati ili spremiti kao PDF. Besplatno i bez ograničenja.</p></details>
+  <details><summary>Provjerava li alat ispravnost e-računa?</summary><p>Provjerava izračune (osnovica + PDV = ukupno, zbroj stavki, iznos za plaćanje) i označava odstupanja. Nije potpuna EN 16931 validacija.</p></details>
+  <details><summary>Tko stoji iza InvoiceSheeta?</summary><p>Tomislav Hofman, softverski inženjer iz Osijeka. Plaćanje obrađuje Polar kao prodavatelj (merchant of record), koji izdaje i račun s PDV-om.</p></details>
+  <details><summary>Mogu li dobiti povrat novca?</summary><p>Da, pošaljite e-mail unutar 14 dana za puni povrat.</p></details>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2>Vodiči</h2>
+  <ul class="guides"><li><a href="/invoicesheet/hr/kako-otvoriti-e-racun/" hreflang="hr">Kako otvoriti e-račun (XML)</a></li><li><a href="/invoicesheet/de/xrechnung-oeffnen/" hreflang="de">XRechnung öffnen und lesen</a> <span class="muted small">(Deutsch)</span></li><li><a href="/invoicesheet/de/e-rechnung-oeffnen/" hreflang="de">E-Rechnung öffnen</a> <span class="muted small">(Deutsch)</span></li><li><a href="/invoicesheet/de/zugferd-auslesen/" hreflang="de">ZUGFeRD-Rechnung auslesen</a> <span class="muted small">(Deutsch)</span></li><li><a href="/invoicesheet/fr/lire-facture-factur-x/" hreflang="fr">Lire une facture Factur-X ou XML</a> <span class="muted small">(Français)</span></li><li><a href="/invoicesheet/nl/peppol-factuur-openen/" hreflang="nl">Peppol-factuur openen en lezen</a> <span class="muted small">(Nederlands)</span></li><li><a href="/invoicesheet/pl/ksef-do-excela/" hreflang="pl">Faktury z KSeF do Excela</a> <span class="muted small">(Polski)</span></li><li><a href="/invoicesheet/pl/jak-otworzyc-fakture-ksef-xml/" hreflang="pl">Jak otworzyć fakturę XML z KSeF</a> <span class="muted small">(Polski)</span></li><li><a href="/invoicesheet/ubl-invoice-viewer/" hreflang="en">UBL / Peppol invoice viewer</a> <span class="muted small">(English)</span></li><li><a href="/invoicesheet/ubl-to-excel/" hreflang="en">UBL / Peppol XML to Excel</a> <span class="muted small">(English)</span></li><li><a href="/invoicesheet/en16931-fields/">Popis polja EN 16931 (UBL i CII XPath, engleski)</a></li></ul>
+</div></section>
+</main>
+<footer class="site"><div class="wrap">
+  <span>Izrađeno u Hrvatskoj, Tomislav Hofman · <a href="https://hofman.tech/">hofman.tech</a></span>
+  <span><a href="/invoicesheet/privacy.html">Privatnost</a> · <a href="/invoicesheet/terms.html">Uvjeti i povrat</a> · <a href="mailto:contact@hofman.tech">Kontakt</a></span>
+</div></footer>
+
+<dialog id="is-modal" aria-label="Invoice">
+  <div class="dialog-bar"><button id="is-print" class="btn" type="button">Ispis / spremi PDF</button><button class="btn" type="button" data-close>Zatvori</button></div>
+  <div id="is-modal-body" class="dialog-body"></div>
+</dialog>
+
+<dialog id="is-paywall" aria-labelledby="is-pw-title">
+  <div class="dialog-body">
+    <h2 id="is-pw-title" style="margin-top:0">Izvezite <span id="is-paywall-count"></span> računa uz Pro</h2>
+    <p>Besplatna verzija izvozi do 3 računa odjednom. Pro uklanja ograničenje za jednokratnih 29 €: bez pretplate, povrat novca u 14 dana.</p>
+    <p><a id="is-buy" class="btn primary" href="#" target="_blank" rel="noopener">Kupi Pro, 29 €</a></p>
+    <p class="small">Već ste kupili? Zalijepite licencni ključ:</p>
+    <form id="is-key-form"><input id="is-key" autocomplete="off" spellcheck="false" placeholder="XXXX-XXXX-…" aria-label="Licence key"><button class="btn" type="submit">Aktiviraj</button></form>
+    <p id="is-key-msg" class="small" aria-live="polite"></p>
+    <p style="text-align:right;margin-bottom:0"><button class="btn" type="button" data-close>Zatvori</button></p>
+  </div>
+</dialog>
+
+<script>window.IS_CONFIG={"polarOrgId":"","checkoutUrl":"","freeLimit":3};window.IS_I18N={"parsing":"Čitam datoteke…","err_not_invoice":"nije e-račun (očekuje se UBL, CII ili KSeF XML)","err_pdf_no_xml":"ovaj PDF nema ugrađen XML e-računa","err_read":"nije moguće pročitati","kind_invoice":"Račun","kind_credit":"Odobrenje","kind_correction":"Korektivni račun","n_invoices":"Računa: {n}","totals_label":"Ukupno (odobrenja oduzeta)","warn_netvat":"osnovica + PDV ≠ ukupno","warn_lines":"stavke se ne zbrajaju u ukupni iznos stavki","warn_payable":"iznos za plaćanje razlikuje se od ukupno − predujam","launch_free":"Razdoblje lansiranja: skupni izvoz besplatan je za sve.","free_limit":"Besplatno: izvoz do {n} računa odjednom. Pro otključava neograničeni skupni izvoz.","pro_active":"Pro je aktivan u ovom pregledniku. Hvala!","key_ok":"Licenca aktivirana.","key_bad":"Licencni ključ nije prepoznat.","key_offline":"Licencni poslužitelj nije dostupan. Pokušajte ponovno za trenutak.","sheet_invoices":"Računi","sheet_lines":"Stavke","sheet_vat":"PDV rekapitulacija","col_file":"Datoteka","col_format":"Format","col_type":"Vrsta","col_number":"Broj računa","col_issue":"Datum izdavanja","col_due":"Datum dospijeća","col_currency":"Valuta","col_seller":"Izdavatelj","col_seller_vat":"PDV ID / OIB izdavatelja","col_seller_country":"Država izdavatelja","col_buyer":"Kupac","col_buyer_vat":"PDV ID / OIB kupca","col_buyer_ref":"Referenca kupca","col_order_ref":"Broj narudžbe","col_net":"Osnovica","col_vat":"PDV","col_gross":"Ukupno","col_prepaid":"Predujam","col_payable":"Za platiti","col_pay_ref":"Poziv na broj","col_lines":"Stavki","col_check":"Provjera","col_line":"Stavka","col_item":"Artikl","col_desc":"Opis","col_item_id":"Šifra","col_qty":"Količina","col_unit":"Jed. mj.","col_unit_price":"Cijena","col_line_net":"Iznos","col_vat_cat":"PDV kategorija","col_vat_rate":"PDV %","col_vat_base":"Osnovica","col_vat_amount":"Iznos PDV-a","v_issued":"Datum","v_due":"Dospijeće","v_delivery":"Isporuka","v_seller":"Izdavatelj","v_buyer":"Kupac","v_vatid":"PDV ID","v_taxid":"OIB / porezni br.","v_payment":"Plaćanje","v_lines_total":"Zbroj stavki","v_allowances":"Popusti","v_charges":"Troškovi","v_prepaid":"Predujam","v_generated":"Čitljivi prikaz koji je InvoiceSheet izradio iz XML-a e-računa","u_pcs":"kom","u_day":"dan","u_month":"mjesec","u_year":"godina","u_week":"tjedan","u_lumpsum":"paušal","u_set":"set"};</script>
+<script src="/invoicesheet/assets/parser.js?v=40305118"></script>
+<script src="/invoicesheet/assets/app.js?v=a6372af0"></script>
+</body>
+</html>

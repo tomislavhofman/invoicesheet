@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XRechnung &amp; ZUGFeRD in Excel umwandeln: viele E-Rechnungen auf einmal | InvoiceSheet</title>
+<meta name="description" content="Hunderte E-Rechnungen (XRechnung, ZUGFeRD, Factur-X, UBL, Peppol) per Drag &amp; Drop in eine Excel-Tabelle: Rechnungen, Positionen und USt. Läuft im Browser, nichts wird hochgeladen.">
+<link rel="canonical" href="https://hofman.tech/invoicesheet/de/">
+<link rel="alternate" hreflang="en" href="https://hofman.tech/invoicesheet/">
+<link rel="alternate" hreflang="de" href="https://hofman.tech/invoicesheet/de/">
+<link rel="alternate" hreflang="fr" href="https://hofman.tech/invoicesheet/fr/">
+<link rel="alternate" hreflang="nl" href="https://hofman.tech/invoicesheet/nl/">
+<link rel="alternate" hreflang="pl" href="https://hofman.tech/invoicesheet/pl/">
+<link rel="alternate" hreflang="hr" href="https://hofman.tech/invoicesheet/hr/">
+<link rel="alternate" hreflang="x-default" href="https://hofman.tech/invoicesheet/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="XRechnung &amp; ZUGFeRD in Excel umwandeln: viele E-Rechnungen auf einmal | InvoiceSheet">
+<meta property="og:description" content="Hunderte E-Rechnungen (XRechnung, ZUGFeRD, Factur-X, UBL, Peppol) per Drag &amp; Drop in eine Excel-Tabelle: Rechnungen, Positionen und USt. Läuft im Browser, nichts wird hochgeladen.">
+<meta property="og:url" content="https://hofman.tech/invoicesheet/de/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%230f6b5c%22%2F%3E%3Cpath%20d%3D%22M9%208h14M9%2013h14M9%2018h9M9%2023h6%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="/invoicesheet/assets/style.css?v=54aa6836">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"InvoiceSheet","applicationCategory":"BusinessApplication","operatingSystem":"Web browser","url":"https://hofman.tech/invoicesheet/de/","description":"Hunderte E-Rechnungen (XRechnung, ZUGFeRD, Factur-X, UBL, Peppol) per Drag & Drop in eine Excel-Tabelle: Rechnungen, Positionen und USt. Läuft im Browser, nichts wird hochgeladen.","inLanguage":"de","offers":[{"@type":"Offer","price":"0","priceCurrency":"EUR"}],"author":{"@type":"Person","name":"Tomislav Hofman","url":"https://hofman.tech/"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Werden meine Rechnungen hochgeladen?","acceptedAnswer":{"@type":"Answer","text":"Nein. Die Dateien werden per JavaScript in Ihrem Browser gelesen und verlassen Ihr Gerät nicht. Netzwerkzugriffe gibt es nur für die Seite selbst und bei Bedarf für Open-Source-Bibliotheken (PDF/ZIP/Excel) von cdnjs."}},{"@type":"Question","name":"Was steht in der Excel-Datei?","acceptedAnswer":{"@type":"Answer","text":"Drei Blätter. „Rechnungen“: eine Zeile pro Rechnung mit Nummer, Daten, Verkäufer und Käufer samt USt-IdNr., Netto, USt, Brutto, Zahlbetrag, IBAN und Verwendungszweck. „Positionen“: jede Rechnungsposition. „USt-Aufschlüsselung“: eine Zeile pro Steuersatz und Rechnung."}},{"@type":"Question","name":"Prüft das Tool meine XRechnung?","acceptedAnswer":{"@type":"Answer","text":"Es rechnet nach (Netto + USt = Brutto, Positionssumme, Zahlbetrag) und markiert Abweichungen. Es ersetzt keine vollständige Prüfung mit dem KoSIT-Validator."}},{"@type":"Question","name":"Wie öffne ich eine einzelne XRechnung?","acceptedAnswer":{"@type":"Answer","text":"Datei ablegen und auf die Rechnungsnummer klicken. Sie sehen eine lesbare Rechnung, die Sie drucken oder als PDF speichern können. Das ist kostenlos und unbegrenzt."}},{"@type":"Question","name":"Wer steckt dahinter?","acceptedAnswer":{"@type":"Answer","text":"Tomislav Hofman, Softwareentwickler aus Osijek, Kroatien. Die Zahlung wickelt Polar als Merchant of Record ab, inklusive Rechnung mit ausgewiesener USt."}},{"@type":"Question","name":"Kann ich zurückgeben?","acceptedAnswer":{"@type":"Answer","text":"Ja. Wenn Pro nicht passt, genügt innerhalb von 14 Tagen eine E-Mail für die volle Erstattung."}}]}</script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="dec793c0-5ade-448a-acfb-2c015b441f1d" data-domains="hofman.tech"></script>
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="brand" href="/invoicesheet/de/">Invoice<span>Sheet</span></a>
+  <nav class="langs" aria-label="Language"><a href="/invoicesheet/" hreflang="en">English</a><a href="/invoicesheet/de/" hreflang="de" aria-current="true">Deutsch</a><a href="/invoicesheet/fr/" hreflang="fr">Français</a><a href="/invoicesheet/nl/" hreflang="nl">Nederlands</a><a href="/invoicesheet/pl/" hreflang="pl">Polski</a><a href="/invoicesheet/hr/" hreflang="hr">Hrvatski</a></nav>
+</div></header>
+<main>
+<div class="wrap">
+  <section class="hero">
+    <h1>XRechnung &amp; ZUGFeRD in Excel umwandeln, auch hundertfach</h1>
+    <p>XML-E-Rechnungen, ZUGFeRD-/Factur-X-PDFs oder ein ZIP hineinziehen. Alle Rechnungen erscheinen lesbar in einer Tabelle, jede lässt sich als Rechnung anzeigen und drucken, und alles geht als Excel oder CSV raus.</p>
+    <div class="badges"><span class="badge">Kein Upload: läuft im Browser</span><span class="badge">Hunderte Dateien auf einmal</span><span class="badge">XML, PDF und ZIP</span></div>
+  </section>
+
+  <div id="is-drop" class="drop" role="button" tabindex="0" aria-describedby="is-drop-hint">
+    <strong>E-Rechnungen hier ablegen</strong>
+    <span id="is-drop-hint" class="muted">oder klicken und auswählen: .xml, .pdf (ZUGFeRD/Factur-X), .zip</span>
+    <input id="is-file" type="file" multiple accept=".xml,.pdf,.zip,application/xml,text/xml,application/pdf,application/zip">
+  </div>
+  <p id="is-drop-status" class="muted small" aria-live="polite"></p>
+  <p id="is-gate-note" class="muted small"></p>
+
+  <section id="is-results" class="results" hidden>
+    <div class="toolbar">
+      <strong id="is-count"></strong>
+      <span class="spacer"></span>
+      <button id="is-xlsx" class="btn primary" type="button">Excel herunterladen</button>
+      <button id="is-csv" class="btn" type="button">CSV: Rechnungen</button>
+      <button id="is-csv-lines" class="btn" type="button">CSV: Positionen</button>
+      <button id="is-clear" class="btn" type="button">Leeren</button>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Rechnungsnr.</th><th>Datum</th><th>Verkäufer</th><th>Käufer</th><th class="num">Netto</th><th class="num">USt</th><th class="num">Brutto</th><th>Whg.</th><th>Format</th></tr></thead>
+        <tbody id="is-tbody"></tbody>
+        <tfoot id="is-tfoot"></tfoot>
+      </table>
+    </div>
+    <ul id="is-errors" hidden></ul>
+  </section>
+</div>
+
+<section class="block"><div class="wrap">
+  <h2>So funktioniert es</h2>
+  <div class="grid"><div class="card"><h3>1. Dateien ablegen</h3><p>XRechnung- oder UBL-XML, ZUGFeRD-/Factur-X-PDFs oder ein ZIP aus dem Rechnungseingang.</p></div><div class="card"><h3>2. Tabelle prüfen</h3><p>Jede Rechnung mit Verkäufer, Käufer, Netto, USt und Brutto. Summen werden nachgerechnet, Abweichungen markiert.</p></div><div class="card"><h3>3. Exportieren</h3><p>Eine Excel-Datei mit drei Blättern (Rechnungen, Positionen, USt-Aufschlüsselung), bereit für Buchhaltung oder Pivot.</p></div></div>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2>Unterstützte Formate</h2>
+  <div class="grid"><div class="card"><h3>UBL 2.1</h3><p>Rechnungen und Gutschriften: XRechnung (UBL), Peppol BIS Billing 3.0, EHF, NLCIUS, OIOUBL.</p></div><div class="card"><h3>UN/CEFACT CII</h3><p>XRechnung (CII), ZUGFeRD 2.x und Factur-X, alle Profile von Minimum bis Extended.</p></div><div class="card"><h3>Hybride PDFs</h3><p>ZUGFeRD 1.0/2.x und Factur-X: das eingebettete XML wird automatisch ausgelesen.</p></div><div class="card"><h3>KSeF FA(3)</h3><p>Polnische strukturierte Rechnungen aus KSeF (FA(3), auch FA(2) und FA(1)), inklusive Korrekturrechnungen.</p></div><div class="card"><h3>ZIP-Archive</h3><p>Einen ganzen Export aus dem E-Rechnungs-Postfach ablegen; XML- und PDF-Dateien darin werden gelesen.</p></div></div>
+</div></section>
+
+<section class="block" id="pricing"><div class="wrap">
+  <h2>Preise</h2>
+  <div class="grid">
+    <div class="card"><h3>Kostenlos</h3><div class="price">0 €</div><ul><li>Unbegrenzt anzeigen und drucken</li><li>Excel/CSV-Export von bis zu 3 Rechnungen auf einmal</li><li>Alle Formate, PDF und ZIP</li></ul></div>
+    <div class="card"><h3>Pro</h3><div class="price">29 € <span class="muted small">einmalig</span></div><ul><li>Unbegrenzter Massen-Export nach Excel und CSV</li><li>Blätter für Positionen und USt</li><li>Alle künftigen Updates</li><li>14 Tage Geld-zurück ohne Begründung</li></ul>
+      <span class="btn" aria-disabled="true">Demnächst</span> <p class="small muted" style="margin-top:8px">Zum Start ist der Massen-Export für alle kostenlos.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2>Fragen</h2>
+  <details><summary>Werden meine Rechnungen hochgeladen?</summary><p>Nein. Die Dateien werden per JavaScript in Ihrem Browser gelesen und verlassen Ihr Gerät nicht. Netzwerkzugriffe gibt es nur für die Seite selbst und bei Bedarf für Open-Source-Bibliotheken (PDF/ZIP/Excel) von cdnjs.</p></details>
+  <details><summary>Was steht in der Excel-Datei?</summary><p>Drei Blätter. „Rechnungen“: eine Zeile pro Rechnung mit Nummer, Daten, Verkäufer und Käufer samt USt-IdNr., Netto, USt, Brutto, Zahlbetrag, IBAN und Verwendungszweck. „Positionen“: jede Rechnungsposition. „USt-Aufschlüsselung“: eine Zeile pro Steuersatz und Rechnung.</p></details>
+  <details><summary>Prüft das Tool meine XRechnung?</summary><p>Es rechnet nach (Netto + USt = Brutto, Positionssumme, Zahlbetrag) und markiert Abweichungen. Es ersetzt keine vollständige Prüfung mit dem KoSIT-Validator.</p></details>
+  <details><summary>Wie öffne ich eine einzelne XRechnung?</summary><p>Datei ablegen und auf die Rechnungsnummer klicken. Sie sehen eine lesbare Rechnung, die Sie drucken oder als PDF speichern können. Das ist kostenlos und unbegrenzt.</p></details>
+  <details><summary>Wer steckt dahinter?</summary><p>Tomislav Hofman, Softwareentwickler aus Osijek, Kroatien. Die Zahlung wickelt Polar als Merchant of Record ab, inklusive Rechnung mit ausgewiesener USt.</p></details>
+  <details><summary>Kann ich zurückgeben?</summary><p>Ja. Wenn Pro nicht passt, genügt innerhalb von 14 Tagen eine E-Mail für die volle Erstattung.</p></details>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2>Anleitungen</h2>
+  <ul class="guides"><li><a href="/invoicesheet/de/xrechnung-oeffnen/" hreflang="de">XRechnung öffnen und lesen</a></li><li><a href="/invoicesheet/de/e-rechnung-oeffnen/" hreflang="de">E-Rechnung öffnen</a></li><li><a href="/invoicesheet/de/zugferd-auslesen/" hreflang="de">ZUGFeRD-Rechnung auslesen</a></li><li><a href="/invoicesheet/fr/lire-facture-factur-x/" hreflang="fr">Lire une facture Factur-X ou XML</a> <span class="muted small">(Français)</span></li><li><a href="/invoicesheet/nl/peppol-factuur-openen/" hreflang="nl">Peppol-factuur openen en lezen</a> <span class="muted small">(Nederlands)</span></li><li><a href="/invoicesheet/pl/ksef-do-excela/" hreflang="pl">Faktury z KSeF do Excela</a> <span class="muted small">(Polski)</span></li><li><a href="/invoicesheet/pl/jak-otworzyc-fakture-ksef-xml/" hreflang="pl">Jak otworzyć fakturę XML z KSeF</a> <span class="muted small">(Polski)</span></li><li><a href="/invoicesheet/hr/kako-otvoriti-e-racun/" hreflang="hr">Kako otvoriti e-račun (XML)</a> <span class="muted small">(Hrvatski)</span></li><li><a href="/invoicesheet/ubl-invoice-viewer/" hreflang="en">UBL / Peppol invoice viewer</a> <span class="muted small">(English)</span></li><li><a href="/invoicesheet/ubl-to-excel/" hreflang="en">UBL / Peppol XML to Excel</a> <span class="muted small">(English)</span></li><li><a href="/invoicesheet/en16931-fields/">EN-16931-Feldreferenz (UBL- und CII-XPath, Englisch)</a></li></ul>
+</div></section>
+</main>
+<footer class="site"><div class="wrap">
+  <span>Entwickelt in Kroatien von Tomislav Hofman · <a href="https://hofman.tech/">hofman.tech</a></span>
+  <span><a href="/invoicesheet/privacy.html">Datenschutz</a> · <a href="/invoicesheet/terms.html">AGB &amp; Erstattung</a> · <a href="mailto:contact@hofman.tech">Kontakt / Impressum</a></span>
+</div></footer>
+
+<dialog id="is-modal" aria-label="Invoice">
+  <div class="dialog-bar"><button id="is-print" class="btn" type="button">Drucken / als PDF speichern</button><button class="btn" type="button" data-close>Schließen</button></div>
+  <div id="is-modal-body" class="dialog-body"></div>
+</dialog>
+
+<dialog id="is-paywall" aria-labelledby="is-pw-title">
+  <div class="dialog-body">
+    <h2 id="is-pw-title" style="margin-top:0"><span id="is-paywall-count"></span> Rechnungen mit Pro exportieren</h2>
+    <p>Die kostenlose Version exportiert bis zu 3 Rechnungen auf einmal. Pro hebt die Grenze auf: einmalig 29 €, kein Abo, 14 Tage Geld-zurück.</p>
+    <p><a id="is-buy" class="btn primary" href="#" target="_blank" rel="noopener">Pro kaufen, 29 €</a></p>
+    <p class="small">Schon gekauft? Lizenzschlüssel einfügen:</p>
+    <form id="is-key-form"><input id="is-key" autocomplete="off" spellcheck="false" placeholder="XXXX-XXXX-…" aria-label="Licence key"><button class="btn" type="submit">Aktivieren</button></form>
+    <p id="is-key-msg" class="small" aria-live="polite"></p>
+    <p style="text-align:right;margin-bottom:0"><button class="btn" type="button" data-close>Schließen</button></p>
+  </div>
+</dialog>
+
+<script>window.IS_CONFIG={"polarOrgId":"","checkoutUrl":"","freeLimit":3};window.IS_I18N={"parsing":"Dateien werden gelesen…","err_not_invoice":"keine E-Rechnung (UBL-, CII- oder KSeF-XML erwartet)","err_pdf_no_xml":"dieses PDF enthält keine eingebettete E-Rechnung (kein ZUGFeRD/Factur-X)","err_read":"konnte nicht gelesen werden","kind_invoice":"Rechnung","kind_credit":"Gutschrift","kind_correction":"Rechnungskorrektur","n_invoices":"{n} Rechnungen","totals_label":"Summe (Gutschriften abgezogen)","warn_netvat":"Netto + USt ≠ Brutto","warn_lines":"Positionen ergeben nicht die Positionssumme","warn_payable":"Zahlbetrag weicht von Brutto − Anzahlung ab","launch_free":"Zum Start ist der Massen-Export für alle kostenlos.","free_limit":"Kostenlos: Export von bis zu {n} Rechnungen auf einmal. Pro schaltet unbegrenzten Massen-Export frei.","pro_active":"Pro ist in diesem Browser aktiv. Danke!","key_ok":"Lizenz aktiviert.","key_bad":"Dieser Lizenzschlüssel wurde nicht erkannt.","key_offline":"Lizenzserver nicht erreichbar. Bitte gleich noch einmal versuchen.","sheet_invoices":"Rechnungen","sheet_lines":"Positionen","sheet_vat":"USt-Aufschlüsselung","col_file":"Datei","col_format":"Format","col_type":"Art","col_number":"Rechnungsnr.","col_issue":"Rechnungsdatum","col_due":"Fällig am","col_currency":"Währung","col_seller":"Verkäufer","col_seller_vat":"USt-IdNr. Verkäufer","col_seller_country":"Land Verkäufer","col_buyer":"Käufer","col_buyer_vat":"USt-IdNr. Käufer","col_buyer_ref":"Leitweg-ID / Käuferreferenz","col_order_ref":"Bestellnummer","col_net":"Netto","col_vat":"USt","col_gross":"Brutto","col_prepaid":"Anzahlung","col_payable":"Zahlbetrag","col_pay_ref":"Verwendungszweck","col_lines":"Positionen","col_check":"Prüfung","col_line":"Pos.","col_item":"Artikel","col_desc":"Beschreibung","col_item_id":"Artikelnr.","col_qty":"Menge","col_unit":"Einheit","col_unit_price":"Einzelpreis","col_line_net":"Netto","col_vat_cat":"USt-Kategorie","col_vat_rate":"USt %","col_vat_base":"Bemessungsgrundlage","col_vat_amount":"USt-Betrag","v_issued":"Datum","v_due":"Fällig","v_delivery":"Leistung","v_seller":"Von","v_buyer":"An","v_vatid":"USt-IdNr.","v_taxid":"Steuernr.","v_payment":"Zahlung","v_lines_total":"Summe Positionen","v_allowances":"Nachlässe","v_charges":"Zuschläge","v_prepaid":"Anzahlung","v_generated":"Lesbare Ansicht, von InvoiceSheet aus dem E-Rechnungs-XML erzeugt","u_pcs":"Stk.","u_day":"Tag","u_month":"Monat","u_year":"Jahr","u_week":"Woche","u_lumpsum":"pauschal","u_set":"Satz"};</script>
+<script src="/invoicesheet/assets/parser.js?v=40305118"></script>
+<script src="/invoicesheet/assets/app.js?v=a6372af0"></script>
+</body>
+</html>

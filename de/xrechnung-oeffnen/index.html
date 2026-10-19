@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XRechnung öffnen und lesen: kostenlos, ohne Upload | InvoiceSheet</title>
+<meta name="description" content="XRechnung (XML) öffnen und als lesbare Rechnung anzeigen, drucken oder nach Excel exportieren. Direkt im Browser, ohne Installation und ohne Upload.">
+<link rel="canonical" href="https://hofman.tech/invoicesheet/de/xrechnung-oeffnen/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="XRechnung öffnen und lesen: kostenlos, ohne Upload | InvoiceSheet">
+<meta property="og:description" content="XRechnung (XML) öffnen und als lesbare Rechnung anzeigen, drucken oder nach Excel exportieren. Direkt im Browser, ohne Installation und ohne Upload.">
+<meta property="og:url" content="https://hofman.tech/invoicesheet/de/xrechnung-oeffnen/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%230f6b5c%22%2F%3E%3Cpath%20d%3D%22M9%208h14M9%2013h14M9%2018h9M9%2023h6%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="/invoicesheet/assets/style.css?v=54aa6836">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Kann ich eine XRechnung direkt mit Excel öffnen?","acceptedAnswer":{"@type":"Answer","text":"Excel kann XML importieren, aber verschachtelte Rechnungsdaten (mehrere Positionen, mehrere Steuersätze) landen dabei in unübersichtlichen, doppelten Zeilen. InvoiceSheet macht daraus drei saubere Blätter: Rechnungen, Positionen und USt-Aufschlüsselung."}},{"@type":"Question","name":"Ist das ein XRechnung-Validator?","acceptedAnswer":{"@type":"Answer","text":"Nein. InvoiceSheet rechnet die Beträge nach (Netto + USt = Brutto, Summe der Positionen, Zahlbetrag) und markiert Abweichungen. Eine vollständige Prüfung gegen alle Regeln macht der offizielle KoSIT-Validator."}},{"@type":"Question","name":"Brauche ich ein Programm oder ein Konto?","acceptedAnswer":{"@type":"Answer","text":"Nein. Es läuft in jedem aktuellen Browser, auch auf Mac und Tablet, ohne Anmeldung."}},{"@type":"Question","name":"Kostet das Anzeigen etwas?","acceptedAnswer":{"@type":"Answer","text":"Nein. Anzeigen und Drucken ist kostenlos und unbegrenzt."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"InvoiceSheet","item":"https://hofman.tech/invoicesheet/de/"},{"@type":"ListItem","position":2,"name":"XRechnung öffnen und lesen","item":"https://hofman.tech/invoicesheet/de/xrechnung-oeffnen/"}]}</script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="dec793c0-5ade-448a-acfb-2c015b441f1d" data-domains="hofman.tech"></script>
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="brand" href="/invoicesheet/de/">Invoice<span>Sheet</span></a>
+  <nav class="langs" aria-label="Language"><a href="/invoicesheet/" hreflang="en">English</a><a href="/invoicesheet/de/" hreflang="de" aria-current="true">Deutsch</a><a href="/invoicesheet/fr/" hreflang="fr">Français</a><a href="/invoicesheet/nl/" hreflang="nl">Nederlands</a><a href="/invoicesheet/pl/" hreflang="pl">Polski</a><a href="/invoicesheet/hr/" hreflang="hr">Hrvatski</a></nav>
+</div></header>
+<main>
+<div class="wrap">
+  <section class="hero">
+    <p class="crumbs small"><a href="/invoicesheet/de/">InvoiceSheet</a> › Anleitungen</p>
+    <h1>XRechnung öffnen und lesen</h1>
+    <p>Eine XRechnung ist eine reine XML-Datei: Im Browser oder Editor sieht man nur Code. Ziehen Sie die Datei hier hinein und Sie sehen sofort eine lesbare Rechnung, die Sie drucken, als PDF speichern oder nach Excel exportieren können.</p>
+  </section>
+  <p class="try small muted">Mit Ihrer Datei ausprobieren:</p>
+  <div id="is-drop" class="drop" role="button" tabindex="0" aria-describedby="is-drop-hint">
+    <strong>E-Rechnungen hier ablegen</strong>
+    <span id="is-drop-hint" class="muted">oder klicken und auswählen: .xml, .pdf (ZUGFeRD/Factur-X), .zip</span>
+    <input id="is-file" type="file" multiple accept=".xml,.pdf,.zip,application/xml,text/xml,application/pdf,application/zip">
+  </div>
+  <p id="is-drop-status" class="muted small" aria-live="polite"></p>
+  <p id="is-gate-note" class="muted small"></p>
+
+  <section id="is-results" class="results" hidden>
+    <div class="toolbar">
+      <strong id="is-count"></strong>
+      <span class="spacer"></span>
+      <button id="is-xlsx" class="btn primary" type="button">Excel herunterladen</button>
+      <button id="is-csv" class="btn" type="button">CSV: Rechnungen</button>
+      <button id="is-csv-lines" class="btn" type="button">CSV: Positionen</button>
+      <button id="is-clear" class="btn" type="button">Leeren</button>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Rechnungsnr.</th><th>Datum</th><th>Verkäufer</th><th>Käufer</th><th class="num">Netto</th><th class="num">USt</th><th class="num">Brutto</th><th>Whg.</th><th>Format</th></tr></thead>
+        <tbody id="is-tbody"></tbody>
+        <tfoot id="is-tfoot"></tfoot>
+      </table>
+    </div>
+    <ul id="is-errors" hidden></ul>
+  </section>
+</div>
+
+<section class="block"><div class="wrap prose">
+<h2>Warum sieht meine XRechnung aus wie Code?</h2>
+<p>Die XRechnung ist der deutsche Standard für elektronische Rechnungen und setzt die europäische Norm EN 16931 um. Anders als ein PDF enthält sie kein Layout, sondern nur strukturierte Daten: Rechnungsnummer, Beträge, Steuersätze, Bankverbindung. Sie ist für Buchhaltungssoftware gemacht, nicht für Menschen.</p>
+<p>Seit dem 1. Januar 2025 müssen Unternehmen in Deutschland E-Rechnungen von anderen Unternehmen empfangen können. Deshalb landen jetzt auch bei kleinen Betrieben, Vereinen und Selbstständigen XML-Anhänge im Postfach, oft ohne passendes Programm.</p>
+
+<h2>So öffnen Sie eine XRechnung</h2>
+<ol>
+  <li>Die <code>.xml</code>-Datei oben in das Feld ziehen oder anklicken und auswählen. Mehrere Dateien oder ein ZIP gehen auch.</li>
+  <li>In der Tabelle auf die Rechnungsnummer klicken. Es öffnet sich eine lesbare Rechnung mit Verkäufer, Käufer, Positionen, USt-Aufschlüsselung und Bankverbindung.</li>
+  <li>Mit „Drucken / als PDF speichern“ eine Lesekopie ablegen, oder mit „Excel herunterladen“ alle Daten als Tabelle exportieren.</li>
+</ol>
+
+<h2>UBL oder CII: zwei Varianten derselben Rechnung</h2>
+<p>Eine XRechnung gibt es in zwei Syntaxen. Sie erkennen sie an den ersten Zeilen der Datei:</p>
+<ul>
+  <li><strong>UBL</strong>: beginnt mit <code>&lt;Invoice</code> oder <code>&lt;CreditNote</code> (Gutschrift).</li>
+  <li><strong>UN/CEFACT CII</strong>: beginnt mit <code>&lt;rsm:CrossIndustryInvoice</code>. Dieselbe Syntax steckt auch in ZUGFeRD und Factur-X.</li>
+</ul>
+<p>InvoiceSheet liest beide Varianten. Sie müssen nichts einstellen.</p>
+
+<h2>Wo steht was in der XRechnung?</h2>
+<p>Jedes Feld der Norm hat eine Nummer (BT = Business Term). Die wichtigsten für die Buchhaltung:</p>
+<div class="table-scroll"><table class="ref">
+<thead><tr><th>Angabe</th><th>BT</th><th>Spalte im Excel-Export</th></tr></thead>
+<tbody><tr><td>Rechnungsnummer</td><td class="mono">BT-1</td><td>Rechnungsnr.</td></tr><tr><td>Rechnungsdatum</td><td class="mono">BT-2</td><td>Rechnungsdatum</td></tr><tr><td>Fälligkeitsdatum</td><td class="mono">BT-9</td><td>Fällig am</td></tr><tr><td>Leitweg-ID / Käuferreferenz</td><td class="mono">BT-10</td><td>Leitweg-ID / Käuferreferenz</td></tr><tr><td>USt-IdNr. des Verkäufers</td><td class="mono">BT-31</td><td>USt-IdNr. Verkäufer</td></tr><tr><td>Summe netto</td><td class="mono">BT-109</td><td>Netto</td></tr><tr><td>Umsatzsteuer gesamt</td><td class="mono">BT-110</td><td>USt</td></tr><tr><td>Summe brutto</td><td class="mono">BT-112</td><td>Brutto</td></tr><tr><td>Zahlbetrag</td><td class="mono">BT-115</td><td>Zahlbetrag</td></tr><tr><td>IBAN</td><td class="mono">BT-84</td><td>IBAN</td></tr><tr><td>Verwendungszweck</td><td class="mono">BT-83</td><td>Verwendungszweck</td></tr></tbody>
+</table></div>
+<p>Alle Felder mit genauen XPath-Angaben finden Sie in der <a href="../../en16931-fields/">EN-16931-Feldreferenz</a> (Englisch).</p>
+
+<h2>Ihre Rechnungen bleiben auf Ihrem Gerät</h2>
+<p>Die Datei wird per JavaScript in Ihrem Browser gelesen. Sie wird nicht hochgeladen, nicht gespeichert und ist für uns nicht sichtbar. Sie können das prüfen, indem Sie die Seite laden, das WLAN trennen und dann eine Datei hineinziehen.</p>
+
+<h2>Wichtig für die Ablage</h2>
+<p>Die rechtlich maßgebliche Rechnung ist die XML-Datei. Archivieren Sie immer das Original-XML. Die Druckansicht ist nur eine Lesekopie.</p>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2>Fragen</h2>
+  <details><summary>Kann ich eine XRechnung direkt mit Excel öffnen?</summary><p>Excel kann XML importieren, aber verschachtelte Rechnungsdaten (mehrere Positionen, mehrere Steuersätze) landen dabei in unübersichtlichen, doppelten Zeilen. InvoiceSheet macht daraus drei saubere Blätter: Rechnungen, Positionen und USt-Aufschlüsselung.</p></details>
+  <details><summary>Ist das ein XRechnung-Validator?</summary><p>Nein. InvoiceSheet rechnet die Beträge nach (Netto + USt = Brutto, Summe der Positionen, Zahlbetrag) und markiert Abweichungen. Eine vollständige Prüfung gegen alle Regeln macht der offizielle KoSIT-Validator.</p></details>
+  <details><summary>Brauche ich ein Programm oder ein Konto?</summary><p>Nein. Es läuft in jedem aktuellen Browser, auch auf Mac und Tablet, ohne Anmeldung.</p></details>
+  <details><summary>Kostet das Anzeigen etwas?</summary><p>Nein. Anzeigen und Drucken ist kostenlos und unbegrenzt.</p></details>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2>Anleitungen</h2>
+  <ul class="guides"><li><a href="/invoicesheet/de/xrechnung-oeffnen/" hreflang="de">XRechnung öffnen und lesen</a></li><li><a href="/invoicesheet/de/e-rechnung-oeffnen/" hreflang="de">E-Rechnung öffnen</a></li><li><a href="/invoicesheet/de/zugferd-auslesen/" hreflang="de">ZUGFeRD-Rechnung auslesen</a></li><li><a href="/invoicesheet/fr/lire-facture-factur-x/" hreflang="fr">Lire une facture Factur-X ou XML</a> <span class="muted small">(Français)</span></li><li><a href="/invoicesheet/nl/peppol-factuur-openen/" hreflang="nl">Peppol-factuur openen en lezen</a> <span class="muted small">(Nederlands)</span></li><li><a href="/invoicesheet/pl/ksef-do-excela/" hreflang="pl">Faktury z KSeF do Excela</a> <span class="muted small">(Polski)</span></li><li><a href="/invoicesheet/pl/jak-otworzyc-fakture-ksef-xml/" hreflang="pl">Jak otworzyć fakturę XML z KSeF</a> <span class="muted small">(Polski)</span></li><li><a href="/invoicesheet/hr/kako-otvoriti-e-racun/" hreflang="hr">Kako otvoriti e-račun (XML)</a> <span class="muted small">(Hrvatski)</span></li><li><a href="/invoicesheet/ubl-invoice-viewer/" hreflang="en">UBL / Peppol invoice viewer</a> <span class="muted small">(English)</span></li><li><a href="/invoicesheet/ubl-to-excel/" hreflang="en">UBL / Peppol XML to Excel</a> <span class="muted small">(English)</span></li><li><a href="/invoicesheet/en16931-fields/">EN-16931-Feldreferenz (UBL- und CII-XPath, Englisch)</a></li></ul>
+</div></section>
+</main>
+<footer class="site"><div class="wrap">
+  <span>Entwickelt in Kroatien von Tomislav Hofman · <a href="https://hofman.tech/">hofman.tech</a></span>
+  <span><a href="/invoicesheet/privacy.html">Datenschutz</a> · <a href="/invoicesheet/terms.html">AGB &amp; Erstattung</a> · <a href="mailto:contact@hofman.tech">Kontakt / Impressum</a></span>
+</div></footer>
+
+<dialog id="is-modal" aria-label="Invoice">
+  <div class="dialog-bar"><button id="is-print" class="btn" type="button">Drucken / als PDF speichern</button><button class="btn" type="button" data-close>Schließen</button></div>
+  <div id="is-modal-body" class="dialog-body"></div>
+</dialog>
+
+<dialog id="is-paywall" aria-labelledby="is-pw-title">
+  <div class="dialog-body">
+    <h2 id="is-pw-title" style="margin-top:0"><span id="is-paywall-count"></span> Rechnungen mit Pro exportieren</h2>
+    <p>Die kostenlose Version exportiert bis zu 3 Rechnungen auf einmal. Pro hebt die Grenze auf: einmalig 29 €, kein Abo, 14 Tage Geld-zurück.</p>
+    <p><a id="is-buy" class="btn primary" href="#" target="_blank" rel="noopener">Pro kaufen, 29 €</a></p>
+    <p class="small">Schon gekauft? Lizenzschlüssel einfügen:</p>
+    <form id="is-key-form"><input id="is-key" autocomplete="off" spellcheck="false" placeholder="XXXX-XXXX-…" aria-label="Licence key"><button class="btn" type="submit">Aktivieren</button></form>
+    <p id="is-key-msg" class="small" aria-live="polite"></p>
+    <p style="text-align:right;margin-bottom:0"><button class="btn" type="button" data-close>Schließen</button></p>
+  </div>
+</dialog>
+
+<script>window.IS_CONFIG={"polarOrgId":"","checkoutUrl":"","freeLimit":3};window.IS_I18N={"parsing":"Dateien werden gelesen…","err_not_invoice":"keine E-Rechnung (UBL-, CII- oder KSeF-XML erwartet)","err_pdf_no_xml":"dieses PDF enthält keine eingebettete E-Rechnung (kein ZUGFeRD/Factur-X)","err_read":"konnte nicht gelesen werden","kind_invoice":"Rechnung","kind_credit":"Gutschrift","kind_correction":"Rechnungskorrektur","n_invoices":"{n} Rechnungen","totals_label":"Summe (Gutschriften abgezogen)","warn_netvat":"Netto + USt ≠ Brutto","warn_lines":"Positionen ergeben nicht die Positionssumme","warn_payable":"Zahlbetrag weicht von Brutto − Anzahlung ab","launch_free":"Zum Start ist der Massen-Export für alle kostenlos.","free_limit":"Kostenlos: Export von bis zu {n} Rechnungen auf einmal. Pro schaltet unbegrenzten Massen-Export frei.","pro_active":"Pro ist in diesem Browser aktiv. Danke!","key_ok":"Lizenz aktiviert.","key_bad":"Dieser Lizenzschlüssel wurde nicht erkannt.","key_offline":"Lizenzserver nicht erreichbar. Bitte gleich noch einmal versuchen.","sheet_invoices":"Rechnungen","sheet_lines":"Positionen","sheet_vat":"USt-Aufschlüsselung","col_file":"Datei","col_format":"Format","col_type":"Art","col_number":"Rechnungsnr.","col_issue":"Rechnungsdatum","col_due":"Fällig am","col_currency":"Währung","col_seller":"Verkäufer","col_seller_vat":"USt-IdNr. Verkäufer","col_seller_country":"Land Verkäufer","col_buyer":"Käufer","col_buyer_vat":"USt-IdNr. Käufer","col_buyer_ref":"Leitweg-ID / Käuferreferenz","col_order_ref":"Bestellnummer","col_net":"Netto","col_vat":"USt","col_gross":"Brutto","col_prepaid":"Anzahlung","col_payable":"Zahlbetrag","col_pay_ref":"Verwendungszweck","col_lines":"Positionen","col_check":"Prüfung","col_line":"Pos.","col_item":"Artikel","col_desc":"Beschreibung","col_item_id":"Artikelnr.","col_qty":"Menge","col_unit":"Einheit","col_unit_price":"Einzelpreis","col_line_net":"Netto","col_vat_cat":"USt-Kategorie","col_vat_rate":"USt %","col_vat_base":"Bemessungsgrundlage","col_vat_amount":"USt-Betrag","v_issued":"Datum","v_due":"Fällig","v_delivery":"Leistung","v_seller":"Von","v_buyer":"An","v_vatid":"USt-IdNr.","v_taxid":"Steuernr.","v_payment":"Zahlung","v_lines_total":"Summe Positionen","v_allowances":"Nachlässe","v_charges":"Zuschläge","v_prepaid":"Anzahlung","v_generated":"Lesbare Ansicht, von InvoiceSheet aus dem E-Rechnungs-XML erzeugt","u_pcs":"Stk.","u_day":"Tag","u_month":"Monat","u_year":"Jahr","u_week":"Woche","u_lumpsum":"pauschal","u_set":"Satz"};</script>
+<script src="/invoicesheet/assets/parser.js?v=40305118"></script>
+<script src="/invoicesheet/assets/app.js?v=a6372af0"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UBL to Excel: convert Peppol and UBL invoice XML to a spreadsheet | InvoiceSheet</title>
+<meta name="description" content="Convert UBL 2.1 and Peppol BIS invoice XML files to Excel or CSV: one row per invoice, plus line items and VAT breakdown. Hundreds of files at once, in your browser, no upload.">
+<link rel="canonical" href="https://hofman.tech/invoicesheet/ubl-to-excel/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="UBL to Excel: convert Peppol and UBL invoice XML to a spreadsheet | InvoiceSheet">
+<meta property="og:description" content="Convert UBL 2.1 and Peppol BIS invoice XML files to Excel or CSV: one row per invoice, plus line items and VAT breakdown. Hundreds of files at once, in your browser, no upload.">
+<meta property="og:url" content="https://hofman.tech/invoicesheet/ubl-to-excel/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%230f6b5c%22%2F%3E%3Cpath%20d%3D%22M9%208h14M9%2013h14M9%2018h9M9%2023h6%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="/invoicesheet/assets/style.css?v=54aa6836">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does it handle credit notes?","acceptedAnswer":{"@type":"Answer","text":"Yes. UBL CreditNote documents are recognised, marked as credit notes and subtracted in the table totals. In the export they keep the sign used in the document."}},{"@type":"Question","name":"Which decimal separator does the CSV use?","acceptedAnswer":{"@type":"Answer","text":"It follows the page language: the English page uses a comma separator and a decimal point; the German, French, Dutch and Croatian pages use a semicolon and a decimal comma, which is what Excel expects in those countries."}},{"@type":"Question","name":"Is there a file limit?","acceptedAnswer":{"@type":"Answer","text":"Viewing is unlimited. Converting hundreds of files at once works; the practical limit is your browser memory."}},{"@type":"Question","name":"Does it validate Peppol invoices?","acceptedAnswer":{"@type":"Answer","text":"It checks the arithmetic (net + VAT = gross, lines add up, amount due) and flags mismatches. It does not run the full Peppol schematron rules."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"InvoiceSheet","item":"https://hofman.tech/invoicesheet/"},{"@type":"ListItem","position":2,"name":"UBL / Peppol XML to Excel","item":"https://hofman.tech/invoicesheet/ubl-to-excel/"}]}</script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="dec793c0-5ade-448a-acfb-2c015b441f1d" data-domains="hofman.tech"></script>
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="brand" href="/invoicesheet/">Invoice<span>Sheet</span></a>
+  <nav class="langs" aria-label="Language"><a href="/invoicesheet/" hreflang="en" aria-current="true">English</a><a href="/invoicesheet/de/" hreflang="de">Deutsch</a><a href="/invoicesheet/fr/" hreflang="fr">Français</a><a href="/invoicesheet/nl/" hreflang="nl">Nederlands</a><a href="/invoicesheet/pl/" hreflang="pl">Polski</a><a href="/invoicesheet/hr/" hreflang="hr">Hrvatski</a></nav>
+</div></header>
+<main>
+<div class="wrap">
+  <section class="hero">
+    <p class="crumbs small"><a href="/invoicesheet/">InvoiceSheet</a> › Guides</p>
+    <h1>Convert UBL and Peppol invoice XML to Excel</h1>
+    <p>Drop UBL invoice files (Peppol BIS, XRechnung UBL, EHF, NLCIUS, Croatian eRačun and more) and download one Excel workbook: a row per invoice, a row per invoice line and a row per VAT rate.</p>
+  </section>
+  <p class="try small muted">Try it with your file:</p>
+  <div id="is-drop" class="drop" role="button" tabindex="0" aria-describedby="is-drop-hint">
+    <strong>Drop e-invoices here</strong>
+    <span id="is-drop-hint" class="muted">or click to choose: .xml, .pdf (ZUGFeRD/Factur-X), .zip</span>
+    <input id="is-file" type="file" multiple accept=".xml,.pdf,.zip,application/xml,text/xml,application/pdf,application/zip">
+  </div>
+  <p id="is-drop-status" class="muted small" aria-live="polite"></p>
+  <p id="is-gate-note" class="muted small"></p>
+
+  <section id="is-results" class="results" hidden>
+    <div class="toolbar">
+      <strong id="is-count"></strong>
+      <span class="spacer"></span>
+      <button id="is-xlsx" class="btn primary" type="button">Download Excel</button>
+      <button id="is-csv" class="btn" type="button">CSV: invoices</button>
+      <button id="is-csv-lines" class="btn" type="button">CSV: line items</button>
+      <button id="is-clear" class="btn" type="button">Clear</button>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Invoice no.</th><th>Date</th><th>Seller</th><th>Buyer</th><th class="num">Net</th><th class="num">VAT</th><th class="num">Gross</th><th>Cur.</th><th>Format</th></tr></thead>
+        <tbody id="is-tbody"></tbody>
+        <tfoot id="is-tfoot"></tfoot>
+      </table>
+    </div>
+    <ul id="is-errors" hidden></ul>
+  </section>
+</div>
+
+<section class="block"><div class="wrap prose">
+<h2>What you get</h2>
+<p>The Excel file has three sheets:</p>
+<ul>
+  <li><strong>Invoices</strong>: file, format, type (invoice or credit note), number, issue and due date, currency, seller and buyer with VAT IDs and country, buyer and order reference, net, VAT, gross, prepaid, amount due, IBAN, payment reference, number of lines and an arithmetic check.</li>
+  <li><strong>Line items</strong>: invoice number, line number, item name, description, item number, quantity, unit, unit price, net amount, VAT category and rate.</li>
+  <li><strong>VAT breakdown</strong>: one row per VAT category and rate per invoice, with taxable amount and VAT amount.</li>
+</ul>
+<p>The same data is available as CSV (invoices or line items) for import into accounting software.</p>
+
+<h2>How to convert</h2>
+<ol>
+  <li>Drop your <code>.xml</code> files above, or a ZIP exported from your access point or accounting inbox. PDFs with embedded ZUGFeRD or Factur-X XML work too.</li>
+  <li>Check the table: totals are recalculated and mismatches are flagged.</li>
+  <li>Click “Download Excel” or one of the CSV buttons.</li>
+</ol>
+
+<h2>Why not Excel's own XML import?</h2>
+<p>A UBL invoice is a tree: one header, several parties, any number of lines, any number of VAT subtotals, each in its own namespace (<code>cac:</code>, <code>cbc:</code>). Excel's XML import either refuses the file or flattens the tree into repeated rows, where the header values are duplicated for every line and every VAT rate. Summing a column then gives the wrong total. InvoiceSheet maps each EN 16931 business term to its own column instead, so every sheet is a clean table you can filter, pivot or import.</p>
+
+<h2>Supported UBL variants</h2>
+<div class="table-scroll"><table class="ref">
+<thead><tr><th>Variant</th><th>Where it is used</th><th>Notes</th></tr></thead>
+<tbody><tr><td>Peppol BIS Billing 3.0</td><td class="mono">Belgium, Netherlands, Nordics, Australia, Singapore and others</td><td>Invoice and credit note</td></tr><tr><td>XRechnung (UBL)</td><td class="mono">Germany</td><td>CII variant also supported</td></tr><tr><td>eRačun (UBL 2.1)</td><td class="mono">Croatia</td><td>HR CIUS</td></tr><tr><td>NLCIUS / SI-UBL 2.0</td><td class="mono">Netherlands</td><td></td></tr><tr><td>EHF Billing 3.0</td><td class="mono">Norway</td><td></td></tr><tr><td>OIOUBL</td><td class="mono">Denmark</td><td></td></tr></tbody>
+</table></div>
+
+<h2>Private by design</h2>
+<p>The files are parsed by JavaScript in your browser. Nothing is uploaded, so you can convert supplier invoices without sending them to a third party.</p>
+<p>Building your own mapping? The <a href="../en16931-fields/">EN 16931 field reference</a> lists the UBL and CII XPath of every business term.</p>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2>Questions</h2>
+  <details><summary>Does it handle credit notes?</summary><p>Yes. UBL CreditNote documents are recognised, marked as credit notes and subtracted in the table totals. In the export they keep the sign used in the document.</p></details>
+  <details><summary>Which decimal separator does the CSV use?</summary><p>It follows the page language: the English page uses a comma separator and a decimal point; the German, French, Dutch and Croatian pages use a semicolon and a decimal comma, which is what Excel expects in those countries.</p></details>
+  <details><summary>Is there a file limit?</summary><p>Viewing is unlimited. Converting hundreds of files at once works; the practical limit is your browser memory.</p></details>
+  <details><summary>Does it validate Peppol invoices?</summary><p>It checks the arithmetic (net + VAT = gross, lines add up, amount due) and flags mismatches. It does not run the full Peppol schematron rules.</p></details>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2>Guides</h2>
+  <ul class="guides"><li><a href="/invoicesheet/ubl-invoice-viewer/" hreflang="en">UBL / Peppol invoice viewer</a></li><li><a href="/invoicesheet/ubl-to-excel/" hreflang="en">UBL / Peppol XML to Excel</a></li><li><a href="/invoicesheet/de/xrechnung-oeffnen/" hreflang="de">XRechnung öffnen und lesen</a> <span class="muted small">(Deutsch)</span></li><li><a href="/invoicesheet/de/e-rechnung-oeffnen/" hreflang="de">E-Rechnung öffnen</a> <span class="muted small">(Deutsch)</span></li><li><a href="/invoicesheet/de/zugferd-auslesen/" hreflang="de">ZUGFeRD-Rechnung auslesen</a> <span class="muted small">(Deutsch)</span></li><li><a href="/invoicesheet/fr/lire-facture-factur-x/" hreflang="fr">Lire une facture Factur-X ou XML</a> <span class="muted small">(Français)</span></li><li><a href="/invoicesheet/nl/peppol-factuur-openen/" hreflang="nl">Peppol-factuur openen en lezen</a> <span class="muted small">(Nederlands)</span></li><li><a href="/invoicesheet/pl/ksef-do-excela/" hreflang="pl">Faktury z KSeF do Excela</a> <span class="muted small">(Polski)</span></li><li><a href="/invoicesheet/pl/jak-otworzyc-fakture-ksef-xml/" hreflang="pl">Jak otworzyć fakturę XML z KSeF</a> <span class="muted small">(Polski)</span></li><li><a href="/invoicesheet/hr/kako-otvoriti-e-racun/" hreflang="hr">Kako otvoriti e-račun (XML)</a> <span class="muted small">(Hrvatski)</span></li><li><a href="/invoicesheet/en16931-fields/">EN 16931 field reference (UBL and CII XPath)</a></li></ul>
+</div></section>
+</main>
+<footer class="site"><div class="wrap">
+  <span>Made in Croatia by Tomislav Hofman · <a href="https://hofman.tech/">hofman.tech</a></span>
+  <span><a href="/invoicesheet/privacy.html">Privacy</a> · <a href="/invoicesheet/terms.html">Terms &amp; refunds</a> · <a href="mailto:contact@hofman.tech">Contact</a></span>
+</div></footer>
+
+<dialog id="is-modal" aria-label="Invoice">
+  <div class="dialog-bar"><button id="is-print" class="btn" type="button">Print / save as PDF</button><button class="btn" type="button" data-close>Close</button></div>
+  <div id="is-modal-body" class="dialog-body"></div>
+</dialog>
+
+<dialog id="is-paywall" aria-labelledby="is-pw-title">
+  <div class="dialog-body">
+    <h2 id="is-pw-title" style="margin-top:0">Export <span id="is-paywall-count"></span> invoices with Pro</h2>
+    <p>The free version exports up to 3 invoices at once. Pro removes the limit for a one-time €29, with no subscription and a 14-day refund.</p>
+    <p><a id="is-buy" class="btn primary" href="#" target="_blank" rel="noopener">Buy Pro, €29</a></p>
+    <p class="small">Already bought? Paste your licence key:</p>
+    <form id="is-key-form"><input id="is-key" autocomplete="off" spellcheck="false" placeholder="XXXX-XXXX-…" aria-label="Licence key"><button class="btn" type="submit">Activate</button></form>
+    <p id="is-key-msg" class="small" aria-live="polite"></p>
+    <p style="text-align:right;margin-bottom:0"><button class="btn" type="button" data-close>Close</button></p>
+  </div>
+</dialog>
+
+<script>window.IS_CONFIG={"polarOrgId":"","checkoutUrl":"","freeLimit":3};window.IS_I18N={"parsing":"Reading files…","err_not_invoice":"not an e-invoice (UBL, CII or KSeF XML expected)","err_pdf_no_xml":"this PDF has no embedded e-invoice XML (not ZUGFeRD/Factur-X)","err_read":"could not be read","kind_invoice":"Invoice","kind_credit":"Credit note","kind_correction":"Corrective invoice","n_invoices":"{n} invoices","totals_label":"Total (credit notes subtracted)","warn_netvat":"net + VAT ≠ gross","warn_lines":"line items do not add up to the line total","warn_payable":"amount due differs from gross − prepaid","launch_free":"Launch period: bulk export is free for everyone.","free_limit":"Free: export up to {n} invoices at once. Pro unlocks unlimited bulk export.","pro_active":"Pro is active on this browser. Thank you!","key_ok":"Licence activated.","key_bad":"This licence key was not recognised.","key_offline":"Could not reach the licence server. Try again in a moment.","sheet_invoices":"Invoices","sheet_lines":"Line items","sheet_vat":"VAT breakdown","col_file":"File","col_format":"Format","col_type":"Type","col_number":"Invoice no.","col_issue":"Issue date","col_due":"Due date","col_currency":"Currency","col_seller":"Seller","col_seller_vat":"Seller VAT ID","col_seller_country":"Seller country","col_buyer":"Buyer","col_buyer_vat":"Buyer VAT ID","col_buyer_ref":"Buyer reference","col_order_ref":"Order reference","col_net":"Net amount","col_vat":"VAT","col_gross":"Gross amount","col_prepaid":"Prepaid","col_payable":"Amount due","col_pay_ref":"Payment reference","col_lines":"Lines","col_check":"Check","col_line":"Line","col_item":"Item","col_desc":"Description","col_item_id":"Item no.","col_qty":"Quantity","col_unit":"Unit","col_unit_price":"Unit price","col_line_net":"Net","col_vat_cat":"VAT category","col_vat_rate":"VAT %","col_vat_base":"Taxable amount","col_vat_amount":"VAT amount","v_issued":"Issued","v_due":"Due","v_delivery":"Delivery","v_seller":"From","v_buyer":"To","v_vatid":"VAT ID","v_taxid":"Tax no.","v_payment":"Payment","v_lines_total":"Sum of lines","v_allowances":"Allowances","v_charges":"Charges","v_prepaid":"Prepaid","v_generated":"Readable view generated by InvoiceSheet from the e-invoice XML","u_pcs":"pcs","u_day":"day","u_month":"month","u_year":"year","u_week":"week","u_lumpsum":"lump sum","u_set":"set"};</script>
+<script src="/invoicesheet/assets/parser.js?v=40305118"></script>
+<script src="/invoicesheet/assets/app.js?v=a6372af0"></script>
+</body>
+</html>
